@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Shop | Auto Parts</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- NAVBAR (same as homepage) -->
+  <header>
+    <div class="navbar">
+      <div class="nav-logo">
+        <img src="./images/8331508-removebg-preview.png" alt="Logo">
+      </div>
+      <nav class="nav-menu">
+        <a href="index.html">Home</a>
+        <a href="contact.html">Contact Us</a>
+        <a href="shop.html" class="active">Shop</a>
+      </nav>
+      <div class="nav-icons">
+        <a href="cart.html"><i class="fa-solid fa-bag-shopping"></i><span id="cartCount">0</span></a>
+        <a href="login.html"><i class="fa-regular fa-user"></i></a>
+      </div>
+    </div>
+  </header>
+  <!-- ALL CATEGORIES & SEARCH (under nav) -->
+  <div class="nav-bottom">
+    <button class="cat-btn"><i class="fa fa-bars"></i> All Categories</button>
+    <form class="search-form">
+      <input type="search" placeholder="Search...">
+      <button type="submit"><i class="fa fa-search"></i></button>
+    </form>
+    <span class="call-info"><i class="fa-solid fa-phone"></i> Call To +91 9669817500</span>
+  </div>
+
+  <main>
+    <div class="shop-title"><h2>Shop</h2></div>
+    <div class="shop-controls">
+      <span>Showing all 15 results</span>
+      <select class="shop-sort">
+        <option>Default sorting</option>
+        <option>Price low to high</option>
+        <option>Price high to low</option>
+        <option>Newest</option>
+      </select>
+    </div>
+
+    <div class="shop-grid fadein" id="shopGrid">
+      <!-- JS will load products -->
+    </div>
+  </main>
+
+  <!-- Footer Section (keep same as before) -->
+  <footer>
+    <div class="footer-row">
+      <div>
+        <h4>Welcome</h4>
+        <p>Multiple auto parts store. All popular vehicle models & brands. Shop online parts for all cars.</p>
+      </div>
+      <div>
+        <h4>Connect w/WhatsApp</h4>
+        <p>Send us your query,<br>Direct sales support.<br>Whatsapp</p>
+      </div>
+      <div>
+        <h4>Useful Links</h4>
+        <p>Mobile Spares<br>Career<br>Coupons</p>
+      </div>
+      <div>
+        <h4>Contact Details</h4>
+        <p>Address: Near IDBI Bank, Saraipali, Chhattisgarh, India  <br>
+        Phone: +91 9669817500<br>
+        Email: sales@autoparts.com</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Copyright © Shop Mania | Developed by ThemeMask</p>
+    </div>
+  </footer>
+  <!-- Shop Products & Cart Logic -->
+  <script>
+  const products = [
+    {id:1, name:'screw', price:2.00, img:'./images/screw.jpg'},
+    {id:2, name:'Castrol', price:350.00, img:'images/Castrol.jpg'},
+    {id:3, name:'Battery', price:450.10, img:'images/battery.jpg'},
+    {id:5, name:'Tires', price:1200.00, img:'images/tires.jpg'},
+    {id:6, name:'Headlights', price:350.20, img:'images/headlighhts.jpg'},
+    {id:8, name:'Fuel Tank', price:2500.00, img:'images/fuel tanlk.jpg'},
+    {id:10, name:'Brakes', price:150.33, img:'images/brakes.jpg'},
+    {id:11, name:'Suspension System', price:1500.10, img:'images/suspension.jpg'},
+  ];
+  function renderProducts() {
+    const grid = document.getElementById('shopGrid');
+    grid.innerHTML = '';
+    products.forEach(p => {
+      grid.innerHTML += `
+        <div class="product" onclick="addToCart(${p.id})">
+          <img src="${p.img}" alt="${p.name}" title="Click to add to cart" />
+          ${p.sale ? '<span class="p-tag">Sale</span>' : ''}
+          <span class="p-title">${p.name}</span>
+          <span class="p-price">₹${p.price.toFixed(2)}</span>
+        </div>
+      `;
+    });
+    setTimeout(() => grid.classList.add('fadein-visible'), 100);
+  }
+  function getStorage(name) {
+    return JSON.parse(localStorage.getItem(name)) || [];
+  }
+  function setStorage(name, val) {
+    localStorage.setItem(name, JSON.stringify(val));
+    updateCounts();
+  }
+  function addToCart(id) {
+    let c = getStorage('cart');
+    if (!c.includes(id)) c.push(id);
+    setStorage('cart', c);
+    updateCounts();
+    alert('Added to cart!');
+  }
+  function updateCounts() {
+    document.getElementById('cartCount').innerText = getStorage('cart').length;
+  }
+  renderProducts();
+  updateCounts();
+  </script>
+</body>
+</html>

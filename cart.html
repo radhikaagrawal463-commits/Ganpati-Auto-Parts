@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cart | Auto Parts</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- NAVBAR (same as homepage) -->
+  <header>
+    <div class="navbar">
+      <div class="nav-logo">
+        <img src="./images/8331508-removebg-preview.png" alt="Logo">
+      </div>
+      <nav class="nav-menu">
+        <a href="index.html">Home</a>
+        <a href="contact.html">Contact Us</a>
+        <a href="shop.html">Shop</a>
+      </nav>
+      <div class="nav-icons">
+        <a href="cart.html"><i class="fa-solid fa-bag-shopping"></i><span id="cartCount">0</span></a>
+        <a href="login.html"><i class="fa-regular fa-user"></i></a>
+      </div>
+    </div>
+  </header>
+  <!-- ALL CATEGORIES & SEARCH (under nav) -->
+  <div class="nav-bottom">
+    <button class="cat-btn"><i class="fa fa-bars"></i> All Categories</button>
+    <form class="search-form">
+      <input type="search" placeholder="Search...">
+      <button type="submit"><i class="fa fa-search"></i></button>
+    </form>
+    <span class="call-info"><i class="fa-solid fa-phone"></i> Call To +919669817500</span>
+  </div>
+
+  <main>
+    <div class="shop-title"><h2>Your Cart</h2></div>
+    <div id="cartItems" class="cart-grid"></div>
+    <div id="cartTotal" class="cart-total-bar"></div>
+    <div class="checkout-bar">
+      <button onclick="checkoutCart()" class="checkout-btn">Checkout</button>
+    </div>
+  </main>
+  <!-- Footer Section same as shop.html -->
+  <footer>
+    <!-- ... Footer code ... -->
+  </footer>
+  <script>
+  const products = [
+    {id:1, name:'Screw', price:2.00, img:'images/screw.jpg', sale:true},
+    {id:2, name:'Castrol', price:350.00, img:'images/castrol.jpg', sale:true},
+    {id:3, name:'Battery', price:450.10, img:'images/battery.jpg', sale:true},
+    {id:4, name:'Tires', price:1200.00, img:'images/tires.jpg', sale:true},
+    {id:5, name:'Headlights', price:350.20, img:'images/headlighhts.jpg', sale:true},
+    {id:6, name:'Fuel Tank', price:2500.20, img:'images/fuel tanlk.jpg', sale:true},
+    {id:7, name:'Brakes', price:150.33, img:'images/brakes.jpg', sale:true},
+    {id:8, name:'Suspension System', price:1500.10, img:'images/suspension.jpg', sale:true},
+  ];
+  function getStorage(name) {
+    return JSON.parse(localStorage.getItem(name)) || [];
+  }
+  function setStorage(name, val) {
+    localStorage.setItem(name, JSON.stringify(val));
+    updateCounts();
+  }
+  function removeFromCart(id) {
+    let c = getStorage('cart');
+    c = c.filter(item => item !== id);
+    setStorage('cart', c);
+    renderCart();
+  }
+  function renderCart() {
+    const cartIds = getStorage('cart');
+    let grid = document.getElementById('cartItems');
+    let total = 0;
+    grid.innerHTML = '';
+    cartIds.forEach(id => {
+      let p = products.find(pr => pr.id === id);
+      if (p) {
+        total += p.price;
+        grid.innerHTML += `
+          <div class="cart-product">
+            <img src="${p.img}" alt="${p.name}" />
+            <span class="p-title">${p.name}</span>
+            <span class="p-price">₹${p.price.toFixed(2)}</span>
+            <button onclick="removeFromCart(${p.id})" class="cart-remove"><i class="fa fa-trash"></i></button>
+          </div>
+        `;
+      }
+    });
+    document.getElementById('cartTotal').innerHTML = `<strong>Total:</strong> $${total.toFixed(2)}`;
+    updateCounts();
+  }
+  function checkoutCart() {
+    alert('Order Placed successfully!');
+    setStorage('cart', []);
+    renderCart();
+  }
+  function updateCounts() {
+    document.getElementById('cartCount').innerText = getStorage('cart').length;
+  }
+  renderCart();
+  updateCounts();
+  
+  </script>
+</body>
+</html>
